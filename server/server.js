@@ -62,13 +62,20 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Guard API routes if database is disconnected
-app.use("/api", (req, res, next) => {
+// Ensure database connection is active (especially on serverless cold starts in Vercel)
+app.use("/api", async (req, res, next) => {
   if (req.path === "/health") return next();
+  if (mongoose.connection.readyState !== 1) {
+    try {
+      await connectDB();
+    } catch (err) {
+      console.warn("DB connection attempt failed during request:", err?.message || err);
+    }
+  }
   if (mongoose.connection.readyState === 0) {
     return res.status(503).json({
       error: "Service Unavailable",
-      message: "MongoDB database is currently disconnected. Please verify MONGODB_URI in server/.env or start MongoDB service.",
+      message: "MongoDB database is currently disconnected. Please verify MONGODB_URI in Vercel Environment Variables or server/.env.",
     });
   }
   next();
