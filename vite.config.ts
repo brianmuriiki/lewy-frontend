@@ -4,47 +4,6 @@ import tailwindcss from "@tailwindcss/vite";
 import fs from "node:fs";
 import path from "node:path";
 
-import siteConfiguration from "./.figma/make/site.json";
-
-// Vite config — https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-  // .figma/make/deploy-preview passes `--mode development` for cached-preview builds.
-  const emitSourcemaps = mode === "development";
-
-  return {
-    base: process.env.FIGMA_PUBLIC_URL ? `${process.env.FIGMA_PUBLIC_URL}/` : "/",
-    build: {
-      sourcemap: emitSourcemaps ? "inline" : false,
-      minify: !emitSourcemaps,
-    },
-    plugins: [
-      react(),
-      tailwindcss(),
-      figmaSiteConfiguration(siteConfiguration),
-      figmaErrorOverlayReplay(),
-      figmaReactRefreshBoundaryFallback(),
-      figmaMakeKitPlugin({ storiesGlob: "/src/**/*.stories.{ts,tsx,js,jsx}" }),
-      figmaLinkedPackageSourcemaps(),
-    ],
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "./src"),
-      },
-    },
-    server: {
-      host: process.env.FIGMA_DEV_SERVER_HOST || "0.0.0.0",
-      port: parseInt(process.env.PORT || "8443"),
-      strictPort: true,
-      watch: {
-        ignored: ["**/.figma/**"],
-      },
-    },
-    preview: {
-      host: process.env.FIGMA_DEV_SERVER_HOST || "0.0.0.0",
-      port: parseInt(process.env.PORT || "8443"),
-    },
-  };
-});
 
 type FigmaSiteConfiguration = {
   title?: string;
@@ -72,6 +31,73 @@ type FigmaSiteConfiguration = {
     addBypassLinks?: boolean;
   };
 };
+
+function loadSiteConfiguration(): FigmaSiteConfiguration {
+  const fallback: FigmaSiteConfiguration = {
+    title: "Chalcedony Adventures | Luxury Safaris, Fleet Hire & Stays in Kenya",
+    description: "Discover soulful Kenya safaris, 4x4 Land Cruiser fleet hire, luxury tented camps, and bespoke East African travel with Chalcedony Adventures.",
+    robots: {
+      index: false,
+    },
+    accessibility: {
+      addBypassLinks: false,
+    },
+  };
+
+  try {
+    const configDir = (import.meta as any).dirname || __dirname;
+    const siteJsonPath = path.resolve(configDir, "./.figma/make/site.json");
+    if (fs.existsSync(siteJsonPath)) {
+      return JSON.parse(fs.readFileSync(siteJsonPath, "utf-8"));
+    }
+  } catch {
+    // Return fallback configuration
+  }
+  return fallback;
+}
+
+const siteConfiguration = loadSiteConfiguration();
+
+// Vite config — https://vitejs.dev/config/
+export default defineConfig(({ mode }) => {
+  // .figma/make/deploy-preview passes `--mode development` for cached-preview builds.
+  const emitSourcemaps = mode === "development";
+
+  return {
+    base: process.env.FIGMA_PUBLIC_URL ? `${process.env.FIGMA_PUBLIC_URL}/` : "/",
+    build: {
+      sourcemap: emitSourcemaps ? "inline" : false,
+      minify: !emitSourcemaps,
+    },
+    plugins: [
+      react(),
+      tailwindcss(),
+      figmaSiteConfiguration(siteConfiguration),
+      figmaErrorOverlayReplay(),
+      figmaReactRefreshBoundaryFallback(),
+      figmaMakeKitPlugin({ storiesGlob: "/src/**/*.stories.{ts,tsx,js,jsx}" }),
+      figmaLinkedPackageSourcemaps(),
+    ],
+    resolve: {
+      alias: {
+        "@": path.resolve((import.meta as any).dirname || __dirname, "./src"),
+      },
+    },
+    server: {
+      host: process.env.FIGMA_DEV_SERVER_HOST || "0.0.0.0",
+      port: parseInt(process.env.PORT || "8443"),
+      strictPort: true,
+      watch: {
+        ignored: ["**/.figma/**"],
+      },
+    },
+    preview: {
+      host: process.env.FIGMA_DEV_SERVER_HOST || "0.0.0.0",
+      port: parseInt(process.env.PORT || "8443"),
+    },
+  };
+});
+
 
 /** Applies /.figma/make/site.json to the generated document shell. */
 function figmaSiteConfiguration(config: FigmaSiteConfiguration): Plugin {

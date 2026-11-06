@@ -5,5 +5,4 @@ logs/
 .tmp-*
 .cache/
 .mise.toml
-.figma/
 scratch/
