@@ -4432,6 +4432,146 @@ body {
     letter-spacing: 0.05em;
   }
 
+  /* Home Hero Mobile Overhaul */
+  .hero {
+    height: auto !important;
+    min-height: 100svh !important;
+    padding: 130px 0 60px !important;
+    overflow: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+  .hero-bg,
+  .hero > img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  .hero-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    background: linear-gradient(
+      180deg,
+      rgba(4, 27, 20, 0.92) 0%,
+      rgba(4, 29, 21, 0.76) 45%,
+      rgba(5, 23, 18, 0.95) 100%
+    ) !important;
+  }
+  .hero-content {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+  .hero h1 {
+    font-size: clamp(34px, 8.5vw, 44px) !important;
+    line-height: 1.1 !important;
+    margin-bottom: 14px !important;
+    letter-spacing: -0.04em !important;
+  }
+  .hero-copy {
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+    max-width: 100% !important;
+    margin-bottom: 18px !important;
+  }
+  .hero-actions {
+    flex-direction: column !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    gap: 10px !important;
+    margin-top: 18px !important;
+  }
+  .hero-actions .btn {
+    width: 100% !important;
+    min-height: 50px !important;
+    font-size: 15px !important;
+    justify-content: center !important;
+    border-radius: 12px !important;
+  }
+  .hero-trust {
+    margin-top: 22px !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  /* Section Spacing & Headings */
+  .section {
+    padding: 56px 0 !important;
+  }
+  .split-heading {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    margin-bottom: 28px !important;
+  }
+  .section-heading h2,
+  .stay-panel h2 {
+    font-size: clamp(26px, 7vw, 36px) !important;
+    line-height: 1.18 !important;
+  }
+  .section-intro p {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+  .service-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .service-card {
+    min-height: auto !important;
+    padding: 22px 18px !important;
+    border-radius: 16px !important;
+  }
+  .service-card h3 {
+    margin-top: 16px !important;
+    font-size: 20px !important;
+  }
+  .story-grid {
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
+  }
+  .story-images {
+    height: 310px !important;
+  }
+  .story-main {
+    height: 270px !important;
+    width: 86% !important;
+    border-radius: 16px !important;
+  }
+  .story-small {
+    height: 135px !important;
+    width: 55% !important;
+    border-radius: 14px !important;
+  }
+  .experience-stamp {
+    width: 86px !important;
+    height: 86px !important;
+    top: 10px !important;
+    right: 8px !important;
+  }
+  .experience-stamp strong {
+    font-size: 24px !important;
+  }
+  .experience-stamp span {
+    font-size: 7.5px !important;
+  }
+  .values {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: flex-start !important;
+  }
+  .values span {
+    flex-direction: row !important;
+    text-align: left !important;
+    gap: 10px !important;
+  }
+
   /* Page Heroes */
   .page-hero {
     padding: 120px 0 36px !important;
@@ -4454,78 +4594,87 @@ body {
   /* Hero Quick Search */
   .hero-quick-search {
     flex-direction: column !important;
-    padding: 14px;
-    gap: 12px;
-    border-radius: 16px;
-    width: 100%;
-    margin-top: 24px;
+    padding: 16px !important;
+    gap: 12px !important;
+    border-radius: 18px !important;
+    width: 100% !important;
+    margin-top: 22px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
   }
   .search-field {
-    width: 100%;
+    width: 100% !important;
     padding: 6px 4px 10px !important;
     border-right: none !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
   }
   .search-submit-btn {
-    width: 100%;
-    justify-content: center;
-    padding: 13px 20px;
-    font-size: 15px;
-    border-radius: 10px;
-    height: 48px;
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 13px 20px !important;
+    font-size: 15px !important;
+    border-radius: 12px !important;
+    height: 48px !important;
   }
 
-  /* Sticky Category Filters Strip - Momentum horizontal swipe */
+  /* Category Filters Strip - Natural flow & Momentum horizontal swipe */
   .trips-filter-strip,
   .fleet-filter-bar {
-    top: 56px !important;
-    padding: 12px 0 !important;
+    position: relative !important;
+    top: auto !important;
+    z-index: 20 !important;
+    padding: 14px 0 !important;
+    background: #f0ebe0 !important;
   }
   .filter-container {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
   }
   .category-pills {
-    display: flex;
+    display: flex !important;
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    gap: 8px;
-    padding-bottom: 4px;
-    width: 100%;
+    gap: 8px !important;
+    padding: 4px 16px 8px !important;
+    margin: 0 -16px !important;
+    width: calc(100% + 32px) !important;
   }
   .category-pills::-webkit-scrollbar {
     display: none;
   }
   .category-pill {
     white-space: nowrap !important;
-    flex-shrink: 0;
-    padding: 7px 14px;
-    font-size: 12px;
+    flex-shrink: 0 !important;
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    min-height: 40px !important;
+    border-radius: 999px !important;
   }
   .filter-controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    width: 100%;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    width: 100% !important;
   }
   .search-box {
-    width: 100%;
-    padding: 8px 14px;
+    width: 100% !important;
+    padding: 8px 14px !important;
+    border-radius: 12px !important;
   }
   .search-box input {
-    width: 100%;
-    flex: 1;
-    font-size: 14px;
+    width: 100% !important;
+    flex: 1 !important;
+    font-size: 14px !important;
   }
   .sort-box {
-    width: 100%;
-    justify-content: space-between;
+    width: 100% !important;
+    justify-content: space-between !important;
   }
   .sort-box select {
-    flex: 1;
+    flex: 1 !important;
   }
 
   /* Catalog Grids: Trips, Fleet, Hotels */
@@ -4608,8 +4757,8 @@ body {
     width: 100% !important;
     max-width: 100% !important;
     max-height: 92svh !important;
-    border-radius: 22px 22px 0 0 !important;
-    padding: 20px 16px !important;
+    border-radius: 24px 24px 0 0 !important;
+    padding: 20px 16px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
     margin: 0 !important;
@@ -4821,18 +4970,19 @@ body {
     border-radius: 20px !important;
   }
 
-  /* Floating WhatsApp on Mobile */
+  /* Floating WhatsApp on Mobile with Safe Area Insets */
   .floating-whatsapp {
-    bottom: 16px !important;
-    right: 14px !important;
-    width: 48px !important;
-    height: 48px !important;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 16px !important;
+    width: 52px !important;
+    height: 52px !important;
     z-index: 45 !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 50% !important;
   }
   .floating-whatsapp svg {
-    width: 22px !important;
-    height: 22px !important;
+    width: 25px !important;
+    height: 25px !important;
   }
 
   /* Footer */
@@ -4855,6 +5005,15 @@ body {
    EXTRA SMALL PHONES (<= 400px - iPhone SE, Galaxy Mini)
    -------------------------------------------------------------------------- */
 @media (max-width: 400px) {
+  .admin-toggle-btn span {
+    display: none !important;
+  }
+  .admin-toggle-btn {
+    padding: 3px 8px !important;
+  }
+  .topbar-link span {
+    font-size: 10.5px !important;
+  }
   .page-hero h1 {
     font-size: 26px !important;
   }
