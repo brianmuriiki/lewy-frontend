@@ -89,6 +89,21 @@ export default function App() {
       window.removeEventListener("chalcedony_data_change", handleDataChange);
   }, []);
 
+  useEffect(() => {
+    const titles: Record<NavigationPage, string> = {
+      home: "Chalcedony Adventures | Luxury Safaris & Tours in Kenya",
+      about: "Our Story & Team | Chalcedony Adventures",
+      trips: "Safari Packages & Upcoming Trips | Chalcedony Adventures",
+      transport: "4x4 Safari Land Cruisers & Fleet Hire | Chalcedony Adventures",
+      hotels: "Luxury Lodges & Safari Stays | Chalcedony Adventures",
+      gallery: "Safari Photography & Media Gallery | Chalcedony Adventures",
+      booking: "Plan Your Adventure | Chalcedony Adventures",
+      contact: "Contact & Reservations | Chalcedony Adventures",
+      admin: "Staff & Admin Portal | Chalcedony Adventures",
+    };
+    document.title = titles[currentPage] || "Chalcedony Adventures";
+  }, [currentPage]);
+
   const handleSelectTrip = (trip: Trip) => {
     setPrefilledService("Upcoming group trip");
     setPrefilledItemTitle(trip.title);
