@@ -1,6 +1,10 @@
 import { BookingInquiry, GalleryMedia, HotelStay, Trip, Vehicle } from "../types";
 
-const API_BASE = (import.meta as any).env?.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE =
+  (import.meta as any).env?.VITE_API_URL ||
+  (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1"
+    ? "/api"
+    : "http://localhost:5000/api");
 
 export interface MongoAdminUser {
   id: string;

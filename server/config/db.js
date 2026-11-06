@@ -1,32 +1,39 @@
 import mongoose from "mongoose";
 
+// Global cache for serverless environments (Vercel)
+let cached = global.mongoose;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 export async function connectDB() {
-  try {
-    const connUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/chalcedony";
-    const maskedUri = connUri.replace(/:([^:@]+)@/, ":****@");
-    console.log(`Connecting to MongoDB (${maskedUri})...`);
-
-    const conn = await mongoose.connect(connUri, {
-      serverSelectionTimeoutMS: 3000, // Quick fail if local/remote MongoDB is unreachable
-    });
-
-    console.log(`MongoDB Connected: ${conn.connection.host}/${conn.connection.name}`);
-
-    mongoose.connection.on("error", (err) => {
-      console.error(`MongoDB connection lost: ${err.message}`);
-    });
-
-    mongoose.connection.on("disconnected", () => {
-      console.warn("MongoDB disconnected.");
-    });
-
-    return conn;
-  } catch (error) {
-    console.error(`MongoDB Connection Warning: ${error.message}`);
-    console.warn("Server will continue running in fallback mode.");
-    console.warn("To connect to a live MongoDB database, update MONGODB_URI in server/.env");
-    return null;
+  if (cached.conn && mongoose.connection.readyState === 1) {
+    return cached.conn;
   }
+
+  const connUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/chalcedony";
+  const maskedUri = connUri.replace(/:([^:@]+)@/, ":****@");
+
+  if (!cached.promise) {
+    console.log(`Connecting to MongoDB (${maskedUri})...`);
+    cached.promise = mongoose
+      .connect(connUri, {
+        serverSelectionTimeoutMS: 5000,
+      })
+      .then((m) => {
+        console.log(`MongoDB Connected: ${m.connection.host}/${m.connection.name}`);
+        return m;
+      })
+      .catch((err) => {
+        cached.promise = null;
+        console.error(`MongoDB Connection Warning: ${err.message}`);
+        console.warn("Server will continue running in fallback mode.");
+        return null;
+      });
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
 export function isDbConnected() {

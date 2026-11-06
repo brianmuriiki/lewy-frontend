@@ -164,27 +164,29 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start listening
-const server = app.listen(PORT, () => {
-  console.log(`===============================================`);
-  console.log(` Chalcedony MongoDB API Server running on port ${PORT}`);
-  console.log(` Health check: http://localhost:${PORT}/api/health`);
-  console.log(` Auth login:   http://localhost:${PORT}/api/auth/login`);
-  console.log(` Trips API:    http://localhost:${PORT}/api/trips`);
-  console.log(` Vehicles API: http://localhost:${PORT}/api/vehicles`);
-  console.log(` Hotels API:   http://localhost:${PORT}/api/hotels`);
-  console.log(` Gallery API:  http://localhost:${PORT}/api/gallery`);
-  console.log(` Inquiries API:http://localhost:${PORT}/api/inquiries`);
-  console.log(` Image upload: http://localhost:${PORT}/api/upload`);
-  console.log(`===============================================`);
-});
-
-// Graceful shutdown
-process.on("SIGTERM", () => {
-  console.log("SIGTERM signal received: closing HTTP server");
-  server.close(() => {
-    console.log("HTTP server closed");
+// Start listening when running standalone (not in a serverless environment like Vercel)
+if (!process.env.VERCEL) {
+  const server = app.listen(PORT, () => {
+    console.log(`===============================================`);
+    console.log(` Chalcedony MongoDB API Server running on port ${PORT}`);
+    console.log(` Health check: http://localhost:${PORT}/api/health`);
+    console.log(` Auth login:   http://localhost:${PORT}/api/auth/login`);
+    console.log(` Trips API:    http://localhost:${PORT}/api/trips`);
+    console.log(` Vehicles API: http://localhost:${PORT}/api/vehicles`);
+    console.log(` Hotels API:   http://localhost:${PORT}/api/hotels`);
+    console.log(` Gallery API:  http://localhost:${PORT}/api/gallery`);
+    console.log(` Inquiries API:http://localhost:${PORT}/api/inquiries`);
+    console.log(` Image upload: http://localhost:${PORT}/api/upload`);
+    console.log(`===============================================`);
   });
-});
+
+  // Graceful shutdown
+  process.on("SIGTERM", () => {
+    console.log("SIGTERM signal received: closing HTTP server");
+    server.close(() => {
+      console.log("HTTP server closed");
+    });
+  });
+}
 
 export default app;

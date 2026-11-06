@@ -1,0 +1,9 @@
+.git
+.github
+*.log
+logs/
+.tmp-*
+.cache/
+.mise.toml
+.figma/
+scratch/
