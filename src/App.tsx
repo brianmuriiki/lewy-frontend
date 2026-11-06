@@ -142,16 +142,18 @@ export default function App() {
   // Regular Website View
   return (
     <div className="chalcedony-app">
-      <TopBar
-        onNavigate={navigateTo}
-        currentPage={currentPage}
-        isAdmin={isAdmin}
-      />
-      <Header
-        currentPage={currentPage}
-        onNavigate={navigateTo}
-        isAdmin={isAdmin}
-      />
+      <div className="site-header-wrapper">
+        <TopBar
+          onNavigate={navigateTo}
+          currentPage={currentPage}
+          isAdmin={isAdmin}
+        />
+        <Header
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          isAdmin={isAdmin}
+        />
+      </div>
 
       <main className="main-viewport">
         {currentPage === "home" && (

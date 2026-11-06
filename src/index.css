@@ -56,22 +56,28 @@
   padding: 116px 0;
 }
 
-.site-header {
-  position: fixed;
-  z-index: 50;
+.site-header-wrapper {
+  position: sticky;
   top: 0;
-  left: 0;
+  z-index: 100;
   width: 100%;
-  transition: 0.25s ease;
+}
+.site-header {
+  position: relative;
+  width: 100%;
+  background: var(--ivory);
+  transition: all 0.25s ease;
+  border-bottom: 1px solid rgba(13, 51, 40, 0.08);
 }
 .site-header.scrolled {
-  background: rgba(247, 243, 233, 0.96);
+  background: rgba(247, 243, 233, 0.98);
   box-shadow: 0 4px 30px rgba(10, 35, 27, 0.08);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 .nav-shell {
   width: min(1280px, calc(100% - 48px));
-  height: 92px;
+  height: 80px;
   margin: auto;
   display: flex;
   align-items: center;
@@ -79,7 +85,7 @@
   transition: height 0.25s;
 }
 .scrolled .nav-shell {
-  height: 74px;
+  height: 68px;
 }
 .logo {
   display: flex;
@@ -185,35 +191,42 @@ nav button:hover {
 }
 
 .hero {
-  height: min(880px, 100svh);
-  min-height: 700px;
   position: relative;
+  min-height: calc(100svh - 120px);
   color: white;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: #09261e;
 }
+.hero-bg,
 .hero > img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 1;
 }
 .hero-overlay {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background:
     linear-gradient(
       90deg,
-      rgba(4, 27, 20, 0.91) 0%,
-      rgba(4, 29, 21, 0.65) 42%,
-      rgba(4, 29, 21, 0.08) 76%
+      rgba(4, 27, 20, 0.92) 0%,
+      rgba(4, 29, 21, 0.72) 42%,
+      rgba(4, 29, 21, 0.3) 76%
     ),
-    linear-gradient(0deg, rgba(5, 23, 18, 0.45), transparent 35%);
+    linear-gradient(0deg, rgba(5, 23, 18, 0.65), transparent 40%);
 }
 .hero-content {
-  position: absolute;
-  left: max(8vw, calc((100% - 1160px)/2));
-  top: 50%;
-  transform: translateY(-44%);
-  width: min(670px, calc(100% - 48px));
+  position: relative;
+  z-index: 3;
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 60px 0;
 }
 .hero-kicker {
   display: flex;
@@ -492,13 +505,19 @@ em {
   font-size: 15px;
 }
 .trip-footer button {
-  width: 38px;
-  height: 38px;
+  width: auto;
+  height: auto;
   border: 0;
-  display: grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   background: var(--forest);
   color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .services {
@@ -528,6 +547,10 @@ em {
   padding: 37px 27px 31px;
   border-right: 1px solid rgba(255, 255, 255, 0.15);
   transition: background 0.25s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
 }
 .service-card:first-child {
   border-left: 1px solid rgba(255, 255, 255, 0.15);
@@ -552,27 +575,36 @@ em {
   color: var(--gold-light);
 }
 .service-card h3 {
-  margin: 70px 0 16px;
+  margin: 50px 0 16px;
   font:
     500 22px Manrope,
     sans-serif;
 }
 .service-card p {
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 13px;
-  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 24px;
 }
-.service-card button {
-  position: absolute;
-  left: 27px;
-  bottom: 26px;
-  width: 36px;
-  height: 36px;
+.service-link-btn {
+  margin-top: auto;
+  padding: 10px 18px;
+  border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: white;
-  background: transparent;
-  display: grid;
-  place-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.service-link-btn:hover {
+  background: var(--gold);
+  color: #0d3328;
+  border-color: var(--gold);
 }
 
 .story {
@@ -663,10 +695,16 @@ em {
 }
 
 .stay-feature {
-  min-height: 680px;
+  min-height: 640px;
   display: grid;
   grid-template-columns: 56% 44%;
   background: #dcd5c5;
+}
+.stay-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
 }
 .stay-image img {
   width: 100%;
@@ -1013,6 +1051,24 @@ footer {
     italic 14px "Playfair Display",
     serif;
 }
+.footer-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+.footer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--gold-light);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  width: fit-content;
+}
 .footer-links {
   display: flex;
   flex-direction: column;
@@ -1087,248 +1143,6 @@ footer {
   transform: scale(1.08);
 }
 
-@media (max-width: 980px) {
-  .desktop-book {
-    display: none;
-  }
-  .menu-button {
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    border: 0;
-    background: var(--forest);
-    color: white;
-  }
-  nav {
-    display: none;
-    position: absolute;
-    left: 24px;
-    right: 24px;
-    top: 78px;
-    padding: 24px;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    background: var(--ivory);
-    box-shadow: 0 20px 50px rgba(5, 30, 22, 0.15);
-  }
-  nav.open {
-    display: flex;
-  }
-  nav button {
-    text-align: left;
-    padding: 13px 5px;
-    border-bottom: 1px solid #e2ddd2;
-  }
-  nav .mobile-book {
-    display: block;
-    margin-top: 14px;
-    padding: 14px;
-    text-align: center;
-    color: white;
-    background: var(--forest);
-  }
-  .trip-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .trip-card:last-child {
-    display: none;
-  }
-  .service-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .service-card:nth-child(3) {
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
-  }
-  .service-card:nth-child(-n + 2) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  }
-  .story-grid {
-    gap: 55px;
-  }
-  .story-images {
-    height: 500px;
-  }
-  .story-main {
-    height: 440px;
-  }
-  .values {
-    flex-direction: column;
-    gap: 12px;
-  }
-  .stay-feature {
-    grid-template-columns: 50% 50%;
-  }
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 340px;
-  }
-  .booking-grid {
-    gap: 45px;
-  }
-  .footer-main {
-    grid-template-columns: 1.3fr 1fr 1fr;
-  }
-  .footer-contact {
-    grid-column: 2 / 4;
-  }
-}
-
-@media (max-width: 700px) {
-  .container,
-  .nav-shell {
-    width: min(100% - 32px, 1160px);
-  }
-  .section {
-    padding: 82px 0;
-  }
-  .nav-shell {
-    height: 74px;
-  }
-  .logo-mark {
-    width: 35px;
-    height: 35px;
-  }
-  .logo strong {
-    font-size: 12px;
-  }
-  .hero {
-    min-height: 720px;
-    height: 100svh;
-  }
-  .hero-overlay {
-    background:
-      linear-gradient(90deg, rgba(4, 27, 20, 0.9), rgba(4, 29, 21, 0.36)),
-      linear-gradient(0deg, rgba(5, 23, 18, 0.6), transparent 50%);
-  }
-  .hero-content {
-    left: 24px;
-    width: calc(100% - 48px);
-    transform: translateY(-42%);
-  }
-  .hero h1 {
-    font-size: clamp(49px, 15vw, 68px);
-  }
-  .hero-copy {
-    font-size: 14px;
-    line-height: 1.65;
-  }
-  .hero-actions {
-    align-items: stretch;
-    flex-direction: column;
-    max-width: 280px;
-  }
-  .hero-trust {
-    margin-top: 29px;
-  }
-  .scroll-cue {
-    display: none;
-  }
-  .split-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 28px;
-  }
-  .section-heading h2,
-  .stay-panel h2 {
-    font-size: 43px;
-  }
-  .trip-grid {
-    grid-template-columns: 1fr;
-    margin-top: 42px;
-  }
-  .trip-card:last-child {
-    display: block;
-  }
-  .trip-image {
-    height: 300px;
-  }
-  .service-grid {
-    grid-template-columns: 1fr;
-  }
-  .service-card,
-  .service-card:nth-child(3),
-  .service-card:first-child {
-    min-height: 305px;
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  }
-  .service-card h3 {
-    margin-top: 48px;
-  }
-  .story-grid {
-    grid-template-columns: 1fr;
-    gap: 55px;
-  }
-  .story-images {
-    height: 455px;
-  }
-  .story-main {
-    height: 400px;
-    width: 88%;
-  }
-  .story-small {
-    height: 185px;
-  }
-  .experience-stamp {
-    width: 105px;
-    height: 105px;
-  }
-  .values {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-  .values span {
-    flex-direction: column;
-    text-align: center;
-  }
-  .stay-feature {
-    grid-template-columns: 1fr;
-  }
-  .stay-image {
-    height: 390px;
-  }
-  .stay-panel {
-    padding: 70px 25px;
-  }
-  .gallery-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: 230px;
-  }
-  .gallery-grid figure:first-child,
-  .gallery-grid figure:last-child {
-    grid-column: 1 / 3;
-  }
-  blockquote {
-    font-size: 26px;
-  }
-  .booking-grid {
-    grid-template-columns: 1fr;
-  }
-  .form-card {
-    padding: 26px 20px;
-    min-height: 550px;
-  }
-  .field-row {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-  .footer-main {
-    grid-template-columns: 1fr 1fr;
-    gap: 45px 25px;
-  }
-  .footer-brand {
-    grid-column: 1 / 3;
-  }
-  .footer-contact {
-    grid-column: 1 / 3;
-  }
-  .footer-bottom {
-    flex-direction: column;
-    gap: 7px;
-  }
-}
 
 /* ==========================================================================
    MULTI-PAGE EXTENSIONS & ADMIN SUITE STYLING
@@ -1394,10 +1208,6 @@ footer {
   color: #0d3328;
 }
 
-/* Header adjust */
-.site-header {
-  top: 40px;
-}
 .main-nav {
   display: flex;
   align-items: center;
@@ -1441,7 +1251,7 @@ footer {
 .page-hero {
   background: linear-gradient(135deg, #09261e 0%, #17483a 100%);
   color: #fff;
-  padding: 180px 0 70px;
+  padding: 56px 0 40px;
   position: relative;
   overflow: hidden;
 }
@@ -1644,7 +1454,7 @@ footer {
 /* Trips Catalog Grid */
 .trips-catalog-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   gap: 32px;
 }
 .trip-catalog-card {
@@ -2338,7 +2148,7 @@ footer {
 }
 .fleet-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   gap: 30px;
 }
 .vehicle-card {
@@ -2501,7 +2311,7 @@ footer {
 /* Hotels Page Extensions */
 .hotels-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   gap: 30px;
 }
 .hotel-card {
@@ -4417,10 +4227,11 @@ body {
 
   /* Site Header */
   .site-header {
-    top: 36px;
+    position: relative !important;
+    top: auto !important;
   }
   .nav-shell {
-    height: 64px;
+    height: 60px !important;
     width: calc(100% - 24px) !important;
   }
   .logo-mark {
@@ -4435,8 +4246,8 @@ body {
   /* Home Hero Mobile Overhaul */
   .hero {
     height: auto !important;
-    min-height: 100svh !important;
-    padding: 130px 0 60px !important;
+    min-height: auto !important;
+    padding: 36px 0 48px !important;
     overflow: visible !important;
     display: flex !important;
     flex-direction: column !important;
@@ -4455,9 +4266,9 @@ body {
     inset: 0 !important;
     background: linear-gradient(
       180deg,
-      rgba(4, 27, 20, 0.92) 0%,
-      rgba(4, 29, 21, 0.76) 45%,
-      rgba(5, 23, 18, 0.95) 100%
+      rgba(4, 27, 20, 0.94) 0%,
+      rgba(4, 29, 21, 0.82) 45%,
+      rgba(5, 23, 18, 0.96) 100%
     ) !important;
   }
   .hero-content {
@@ -4465,7 +4276,8 @@ body {
     left: auto !important;
     top: auto !important;
     transform: none !important;
-    width: 100% !important;
+    width: calc(100% - 32px) !important;
+    margin: 0 auto !important;
     padding: 0 !important;
   }
   .hero h1 {
@@ -4574,7 +4386,7 @@ body {
 
   /* Page Heroes */
   .page-hero {
-    padding: 120px 0 36px !important;
+    padding: 36px 0 24px !important;
   }
   .page-hero-kicker {
     font-size: 11px;
