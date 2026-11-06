@@ -186,7 +186,7 @@ export function GalleryPage({
                   Plan an Adventure Here <Icon name="arrow" size={15} />
                 </button>
                 <a
-                  href={`https://wa.me/254722415892?text=Hello%20Chalcedony%2C%20I%20saw%20this%20photo%20of%20${encodeURIComponent(
+                  href={`https://wa.me/254705481666?text=Hello%20Chalcedony%2C%20I%20saw%20this%20photo%20of%20${encodeURIComponent(
                     activeMedia.title
                   )}%20and%20would%20love%20to%20visit!`}
                   target="_blank"

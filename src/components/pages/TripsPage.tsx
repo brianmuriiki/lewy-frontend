@@ -277,7 +277,7 @@ export function TripsPage({
                 Design Custom Package <Icon name="arrow" size={18} />
               </button>
               <a
-                href="https://wa.me/254722415892?text=Hello%20Chalcedony%20Adventures%2C%20I%20would%20like%20to%20request%20a%20custom%20trip%20itinerary."
+                href="https://wa.me/254705481666?text=Hello%20Chalcedony%20Adventures%2C%20I%20would%20like%20to%20request%20a%20custom%20trip%20itinerary."
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-ghost"
@@ -408,7 +408,7 @@ export function TripsPage({
                 </div>
                 <div className="modal-action-btns">
                   <a
-                    href={`https://wa.me/254722415892?text=Hello%20Chalcedony%20Adventures%2C%20I%20am%20interested%20in%20booking%20the%20${encodeURIComponent(
+                    href={`https://wa.me/254705481666?text=Hello%20Chalcedony%20Adventures%2C%20I%20am%20interested%20in%20booking%20the%20${encodeURIComponent(
                       activeModalTrip.title
                     )}.`}
                     target="_blank"

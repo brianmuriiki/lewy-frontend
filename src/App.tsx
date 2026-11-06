@@ -188,7 +188,7 @@ export default function App() {
       {/* Floating WhatsApp Quick Action Button */}
       <a
         className="floating-whatsapp"
-        href="https://wa.me/254722415892?text=Hello%20Chalcedony%20Adventures%2C%20I%20would%20like%20to%20plan%20a%20trip."
+        href="https://wa.me/254705481666?text=Hello%20Chalcedony%20Adventures%2C%20I%20would%20like%20to%20plan%20a%20trip."
         target="_blank"
         rel="noreferrer"
         aria-label="Chat with us on WhatsApp"

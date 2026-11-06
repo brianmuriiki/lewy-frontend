@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Category, Trip } from "../../types";
 import { StorageService } from "../../services/storage";
+import { MongoApi } from "../../services/api";
 import { Icon } from "../ui/Icon";
 
 export function TripsManager({
@@ -12,6 +13,8 @@ export function TripsManager({
 }) {
   const [editingTrip, setEditingTrip] = useState<Partial<Trip> | null>(null);
   const [isNew, setIsNew] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadMsg, setUploadMsg] = useState<string | null>(null);
 
   const categories: Category[] = [
     "Safari",
@@ -310,6 +313,35 @@ export function TripsManager({
                   placeholder="https://images.unsplash.com/..."
                 />
               </label>
+
+              <div style={{ marginTop: "-8px", marginBottom: "16px" }}>
+                <label className="text-xs font-semibold text-gray-500 mb-1 block">
+                  Or Upload Image to MongoDB
+                </label>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    disabled={uploadingImage}
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      setUploadingImage(true);
+                      setUploadMsg(null);
+                      const res = await MongoApi.uploadImage(file, "trips", editingTrip.title || "");
+                      setUploadingImage(false);
+                      if (res.success && res.url) {
+                        setEditingTrip((prev) => ({ ...prev, featuredImage: res.url }));
+                        setUploadMsg("Image uploaded successfully!");
+                        setTimeout(() => setUploadMsg(null), 3000);
+                      }
+                    }}
+                    style={{ fontSize: "12px" }}
+                  />
+                  {uploadingImage && <span className="text-xs text-amber-600">Uploading...</span>}
+                  {uploadMsg && <span className="text-xs text-green-600 font-semibold">{uploadMsg}</span>}
+                </div>
+              </div>
 
               <label>
                 Trip Overview *

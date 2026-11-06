@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BookingInquiry, GalleryMedia, HotelStay, NavigationPage, Trip, Vehicle } from "../../types";
 import { StorageService } from "../../services/storage";
+import { MongoApi } from "../../services/api";
 import { Icon, Logo } from "../ui/Icon";
 import { InquiriesManager } from "./InquiriesManager";
 import { TripsManager } from "./TripsManager";
@@ -26,6 +27,24 @@ export function AdminDashboard({
   const [newPinInput, setNewPinInput] = useState("");
   const [pinSavedMsg, setPinSavedMsg] = useState(false);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [mongoOnline, setMongoOnline] = useState<boolean | null>(null);
+  const [syncing, setSyncing] = useState(false);
+
+  useEffect(() => {
+    MongoApi.checkHealth().then(setMongoOnline);
+  }, []);
+
+  const handleSyncWithBackend = async () => {
+    setSyncing(true);
+    const success = await StorageService.syncWithBackend();
+    setSyncing(false);
+    setMongoOnline(success);
+    if (success) {
+      alert("Synchronized successfully with MongoDB server!");
+    } else {
+      alert("Could not reach MongoDB backend server. Running in local fallback mode.");
+    }
+  };
 
   const refreshData = () => {
     setTrips(StorageService.getTrips());
@@ -98,6 +117,42 @@ export function AdminDashboard({
           <span className="admin-badge-indicator">
             <Icon name="shield" size={14} /> Staff Control Panel
           </span>
+
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "4px 10px",
+              borderRadius: "999px",
+              fontSize: "11px",
+              fontWeight: 600,
+              background: mongoOnline ? "rgba(34, 197, 94, 0.15)" : "rgba(245, 158, 11, 0.15)",
+              color: mongoOnline ? "#4ade80" : "#fbbf24",
+              border: `1px solid ${mongoOnline ? "rgba(34, 197, 94, 0.3)" : "rgba(245, 158, 11, 0.3)"}`,
+            }}
+          >
+            <span
+              style={{
+                width: "7px",
+                height: "7px",
+                borderRadius: "50%",
+                background: mongoOnline ? "#22c55e" : "#f59e0b",
+              }}
+            />
+            {mongoOnline === null ? "Checking Server..." : mongoOnline ? "MongoDB API Active" : "Local Fallback Mode"}
+          </span>
+
+          <button
+            onClick={handleSyncWithBackend}
+            disabled={syncing}
+            className="btn btn-outline-light-sm"
+            type="button"
+            style={{ padding: "4px 9px", fontSize: "11px", opacity: 0.85 }}
+            title="Sync latest records with MongoDB"
+          >
+            <Icon name="refresh" size={13} /> {syncing ? "Syncing..." : "Sync DB"}
+          </button>
         </div>
 
         <div className="admin-header-right">

@@ -82,14 +82,14 @@ export function Footer({
         <div className="footer-links footer-contact">
           <h4>Let’s Connect</h4>
           <a
-            href="https://wa.me/254722415892?text=Hello%20Chalcedony%20Adventures%2C%20I%20would%20like%20to%20plan%20a%20trip."
+            href="https://wa.me/254705481666?text=Hello%20Chalcedony%20Adventures%2C%20I%20would%20like%20to%20plan%20a%20trip."
             target="_blank"
             rel="noreferrer"
             className="contact-link"
           >
             <Icon name="whatsapp" size={17} />
             <div>
-              <strong>+254 722 415 892</strong>
+              <strong>+254 705 481 666</strong>
               <small>WhatsApp (Instant Reply)</small>
             </div>
           </a>

@@ -157,7 +157,7 @@ export function TransportPage({
 
                     <div className="vehicle-actions">
                       <a
-                        href={`https://wa.me/254722415892?text=Hello%20Chalcedony%2C%20I%20need%20a%20quotation%20for%20the%20${encodeURIComponent(
+                        href={`https://wa.me/254705481666?text=Hello%20Chalcedony%2C%20I%20need%20a%20quotation%20for%20the%20${encodeURIComponent(
                           veh.name
                         )}.`}
                         target="_blank"
@@ -235,7 +235,7 @@ export function TransportPage({
                 Request Quotation <Icon name="arrow" size={18} />
               </button>
               <a
-                href="https://wa.me/254722415892?text=Hello%20Chalcedony%20Transport%20Desk%2C%20I%20would%20like%20a%20vehicle%20hire%20quotation."
+                href="https://wa.me/254705481666?text=Hello%20Chalcedony%20Transport%20Desk%2C%20I%20would%20like%20a%20vehicle%20hire%20quotation."
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-ghost"

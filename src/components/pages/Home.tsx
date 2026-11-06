@@ -533,7 +533,7 @@ export function Home({
                 Plan Your Journey <Icon name="arrow" size={18} />
               </button>
               <a
-                href="https://wa.me/254722415892?text=Hello%20Chalcedony%20Adventures%2C%20I%20would%20like%20to%20plan%20a%20trip."
+                href="https://wa.me/254705481666?text=Hello%20Chalcedony%20Adventures%2C%20I%20would%20like%20to%20plan%20a%20trip."
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-ghost"

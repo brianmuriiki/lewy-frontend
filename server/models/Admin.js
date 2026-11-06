@@ -24,7 +24,17 @@ const AdminSchema = new mongoose.Schema(
       default: "admin",
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        ret.id = ret._id.toString();
+        delete ret.password;
+        return ret;
+      },
+    },
+  }
 );
 
 // Hash password before saving

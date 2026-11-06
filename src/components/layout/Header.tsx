@@ -20,6 +20,17 @@ export function Header({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   const navLinks: { label: string; page: NavigationPage }[] = [
     { label: "Home", page: "home" },
     { label: "About Us", page: "about" },
@@ -85,12 +96,21 @@ export function Header({
             className="menu-button"
             onClick={() => setOpen(!open)}
             aria-label="Toggle navigation menu"
+            aria-expanded={open}
             type="button"
           >
             <Icon name={open ? "close" : "menu"} size={24} />
           </button>
         </div>
       </div>
+
+      {open && (
+        <div
+          className="mobile-nav-backdrop"
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+      )}
     </header>
   );
 }

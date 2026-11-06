@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Vehicle, VehicleCategory } from "../../types";
 import { StorageService } from "../../services/storage";
+import { MongoApi } from "../../services/api";
 import { Icon } from "../ui/Icon";
 
 export function FleetManager({
@@ -13,6 +14,8 @@ export function FleetManager({
   const [editingVeh, setEditingVeh] = useState<Partial<Vehicle> | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [featuresStr, setFeaturesStr] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadMsg, setUploadMsg] = useState<string | null>(null);
 
   const categories: VehicleCategory[] = [
     "Safari 4x4",
@@ -293,6 +296,35 @@ export function FleetManager({
                   placeholder="https://images.unsplash.com/..."
                 />
               </label>
+
+              <div style={{ marginTop: "-8px", marginBottom: "16px" }}>
+                <label className="text-xs font-semibold text-gray-500 mb-1 block">
+                  Or Upload Image to MongoDB
+                </label>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    disabled={uploadingImage}
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      setUploadingImage(true);
+                      setUploadMsg(null);
+                      const res = await MongoApi.uploadImage(file, "fleet", editingVeh.name || "");
+                      setUploadingImage(false);
+                      if (res.success && res.url) {
+                        setEditingVeh((prev) => ({ ...prev, image: res.url }));
+                        setUploadMsg("Image uploaded successfully!");
+                        setTimeout(() => setUploadMsg(null), 3000);
+                      }
+                    }}
+                    style={{ fontSize: "12px" }}
+                  />
+                  {uploadingImage && <span className="text-xs text-amber-600">Uploading...</span>}
+                  {uploadMsg && <span className="text-xs text-green-600 font-semibold">{uploadMsg}</span>}
+                </div>
+              </div>
 
               <label>
                 Key Features (comma separated)

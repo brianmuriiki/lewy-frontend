@@ -102,12 +102,12 @@ export function ContactPage({
               <h3>WhatsApp Chat</h3>
               <p>For instant quotations, packing advice, and fast responses within minutes.</p>
               <a
-                href="https://wa.me/254722415892?text=Hello%20Chalcedony%20Adventures%2C%20I%20have%20an%20inquiry."
+                href="https://wa.me/254705481666?text=Hello%20Chalcedony%20Adventures%2C%20I%20have%20an%20inquiry."
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-gold btn-sm"
               >
-                +254 722 415 892
+                +254 705 481 666
               </a>
               <small>Available 24/7 on WhatsApp</small>
             </div>
@@ -146,8 +146,8 @@ export function ContactPage({
               </div>
               <h3>Direct Calls & Hotline</h3>
               <p>For urgent tour coordination, flight transfers, and on-trip assistance.</p>
-              <a href="tel:+254722415892" className="contact-card-link">
-                +254 722 415 892 / +254 703 652 119
+              <a href="tel:+254705481666" className="contact-card-link">
+                +254 705 481 666 / +254 703 652 119
               </a>
               <small>24-hour safari dispatch line</small>
             </div>
@@ -328,7 +328,7 @@ export function ContactPage({
                     <Icon name="instagram" size={17} /> Instagram
                   </a>
                   <a
-                    href="https://wa.me/254722415892"
+                    href="https://wa.me/254705481666"
                     target="_blank"
                     rel="noreferrer"
                     className="social-pill"

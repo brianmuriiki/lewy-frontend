@@ -1,5 +1,6 @@
 import { BookingInquiry, GalleryMedia, HotelStay, Trip, Vehicle } from "../types";
 import { initialGallery, initialHotels, initialInquiries, initialTrips, initialVehicles } from "../data/seedData";
+import { MongoApi } from "./api";
 
 const KEYS = {
   TRIPS: "chalcedony_trips",
@@ -9,7 +10,7 @@ const KEYS = {
   INQUIRIES: "chalcedony_inquiries",
   ADMIN_AUTH: "chalcedony_admin_auth",
   ADMIN_PIN: "chalcedony_admin_pin",
-  FAVORITES: "chalcedony_saved_trips"
+  FAVORITES: "chalcedony_saved_trips",
 };
 
 const DEFAULT_ADMIN_PIN = "chalcedony2026";
@@ -19,7 +20,59 @@ function notifyChange() {
 }
 
 export const StorageService = {
-  // Trips
+  // Sync all data from MongoDB backend if server is online
+  async syncWithBackend(): Promise<boolean> {
+    try {
+      const isOnline = await MongoApi.checkHealth();
+      if (!isOnline) return false;
+
+      const [remoteTrips, remoteVehicles, remoteHotels, remoteGallery] = await Promise.all([
+        MongoApi.getTrips(),
+        MongoApi.getVehicles(),
+        MongoApi.getHotels(),
+        MongoApi.getGallery(),
+      ]);
+
+      let changed = false;
+
+      if (remoteTrips && remoteTrips.length > 0) {
+        localStorage.setItem(KEYS.TRIPS, JSON.stringify(remoteTrips));
+        changed = true;
+      }
+      if (remoteVehicles && remoteVehicles.length > 0) {
+        localStorage.setItem(KEYS.VEHICLES, JSON.stringify(remoteVehicles));
+        changed = true;
+      }
+      if (remoteHotels && remoteHotels.length > 0) {
+        localStorage.setItem(KEYS.HOTELS, JSON.stringify(remoteHotels));
+        changed = true;
+      }
+      if (remoteGallery && remoteGallery.length > 0) {
+        localStorage.setItem(KEYS.GALLERY, JSON.stringify(remoteGallery));
+        changed = true;
+      }
+
+      // If admin is logged in, sync inquiries as well
+      if (this.isAdminLoggedIn()) {
+        const remoteInquiries = await MongoApi.getInquiries();
+        if (remoteInquiries && remoteInquiries.length > 0) {
+          localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(remoteInquiries));
+          changed = true;
+        }
+      }
+
+      if (changed) {
+        notifyChange();
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  },
+
+  // -------------------------------------------------------------
+  // TRIPS
+  // -------------------------------------------------------------
   getTrips(): Trip[] {
     try {
       const data = localStorage.getItem(KEYS.TRIPS);
@@ -35,7 +88,7 @@ export const StorageService = {
 
   saveTrip(trip: Trip): Trip {
     const trips = this.getTrips();
-    const index = trips.findIndex(t => t.id === trip.id);
+    const index = trips.findIndex((t) => t.id === trip.id);
     if (index >= 0) {
       trips[index] = trip;
     } else {
@@ -43,16 +96,24 @@ export const StorageService = {
     }
     localStorage.setItem(KEYS.TRIPS, JSON.stringify(trips));
     notifyChange();
+
+    // Async sync to MongoDB backend
+    MongoApi.saveTrip(trip).catch(() => {});
     return trip;
   },
 
   deleteTrip(id: string): void {
-    const trips = this.getTrips().filter(t => t.id !== id);
+    const trips = this.getTrips().filter((t) => t.id !== id);
     localStorage.setItem(KEYS.TRIPS, JSON.stringify(trips));
     notifyChange();
+
+    // Async sync to MongoDB backend
+    MongoApi.deleteTrip(id).catch(() => {});
   },
 
-  // Vehicles / Fleet
+  // -------------------------------------------------------------
+  // VEHICLES / FLEET
+  // -------------------------------------------------------------
   getVehicles(): Vehicle[] {
     try {
       const data = localStorage.getItem(KEYS.VEHICLES);
@@ -68,7 +129,7 @@ export const StorageService = {
 
   saveVehicle(vehicle: Vehicle): Vehicle {
     const vehicles = this.getVehicles();
-    const index = vehicles.findIndex(v => v.id === vehicle.id);
+    const index = vehicles.findIndex((v) => v.id === vehicle.id);
     if (index >= 0) {
       vehicles[index] = vehicle;
     } else {
@@ -76,16 +137,24 @@ export const StorageService = {
     }
     localStorage.setItem(KEYS.VEHICLES, JSON.stringify(vehicles));
     notifyChange();
+
+    // Async sync to MongoDB backend
+    MongoApi.saveVehicle(vehicle).catch(() => {});
     return vehicle;
   },
 
   deleteVehicle(id: string): void {
-    const vehicles = this.getVehicles().filter(v => v.id !== id);
+    const vehicles = this.getVehicles().filter((v) => v.id !== id);
     localStorage.setItem(KEYS.VEHICLES, JSON.stringify(vehicles));
     notifyChange();
+
+    // Async sync to MongoDB backend
+    MongoApi.deleteVehicle(id).catch(() => {});
   },
 
-  // Hotels / Stays
+  // -------------------------------------------------------------
+  // HOTELS / STAYS
+  // -------------------------------------------------------------
   getHotels(): HotelStay[] {
     try {
       const data = localStorage.getItem(KEYS.HOTELS);
@@ -101,7 +170,7 @@ export const StorageService = {
 
   saveHotel(hotel: HotelStay): HotelStay {
     const hotels = this.getHotels();
-    const index = hotels.findIndex(h => h.id === hotel.id);
+    const index = hotels.findIndex((h) => h.id === hotel.id);
     if (index >= 0) {
       hotels[index] = hotel;
     } else {
@@ -109,16 +178,24 @@ export const StorageService = {
     }
     localStorage.setItem(KEYS.HOTELS, JSON.stringify(hotels));
     notifyChange();
+
+    // Async sync to MongoDB backend
+    MongoApi.saveHotel(hotel).catch(() => {});
     return hotel;
   },
 
   deleteHotel(id: string): void {
-    const hotels = this.getHotels().filter(h => h.id !== id);
+    const hotels = this.getHotels().filter((h) => h.id !== id);
     localStorage.setItem(KEYS.HOTELS, JSON.stringify(hotels));
     notifyChange();
+
+    // Async sync to MongoDB backend
+    MongoApi.deleteHotel(id).catch(() => {});
   },
 
-  // Gallery
+  // -------------------------------------------------------------
+  // GALLERY
+  // -------------------------------------------------------------
   getGallery(): GalleryMedia[] {
     try {
       const data = localStorage.getItem(KEYS.GALLERY);
@@ -134,7 +211,7 @@ export const StorageService = {
 
   saveMedia(item: GalleryMedia): GalleryMedia {
     const gallery = this.getGallery();
-    const index = gallery.findIndex(g => g.id === item.id);
+    const index = gallery.findIndex((g) => g.id === item.id);
     if (index >= 0) {
       gallery[index] = item;
     } else {
@@ -142,16 +219,24 @@ export const StorageService = {
     }
     localStorage.setItem(KEYS.GALLERY, JSON.stringify(gallery));
     notifyChange();
+
+    // Async sync to MongoDB backend
+    MongoApi.saveMedia(item).catch(() => {});
     return item;
   },
 
   deleteMedia(id: string): void {
-    const gallery = this.getGallery().filter(g => g.id !== id);
+    const gallery = this.getGallery().filter((g) => g.id !== id);
     localStorage.setItem(KEYS.GALLERY, JSON.stringify(gallery));
     notifyChange();
+
+    // Async sync to MongoDB backend
+    MongoApi.deleteMedia(id).catch(() => {});
   },
 
-  // Inquiries / Bookings
+  // -------------------------------------------------------------
+  // INQUIRIES / BOOKINGS
+  // -------------------------------------------------------------
   getInquiries(): BookingInquiry[] {
     try {
       const data = localStorage.getItem(KEYS.INQUIRIES);
@@ -165,7 +250,9 @@ export const StorageService = {
     }
   },
 
-  createInquiry(inquiryData: Omit<BookingInquiry, "id" | "referenceCode" | "createdAt" | "status">): BookingInquiry {
+  createInquiry(
+    inquiryData: Omit<BookingInquiry, "id" | "referenceCode" | "createdAt" | "status">
+  ): BookingInquiry {
     const inquiries = this.getInquiries();
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
     const newInquiry: BookingInquiry = {
@@ -173,17 +260,21 @@ export const StorageService = {
       id: "inq-" + Date.now(),
       referenceCode: `CHL-${new Date().getFullYear()}-${randomSuffix}`,
       createdAt: new Date().toLocaleString("en-GB", { dateStyle: "short", timeStyle: "short" }),
-      status: "Pending"
+      status: "Pending",
     };
     inquiries.unshift(newInquiry);
     localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(inquiries));
     notifyChange();
+
+    // Also send directly to MongoDB backend if available
+    MongoApi.createInquiry(newInquiry).catch(() => {});
+
     return newInquiry;
   },
 
   updateInquiryStatus(id: string, status: BookingInquiry["status"], adminNotes?: string): void {
     const inquiries = this.getInquiries();
-    const index = inquiries.findIndex(i => i.id === id);
+    const index = inquiries.findIndex((i) => i.id === id);
     if (index >= 0) {
       inquiries[index].status = status;
       if (adminNotes !== undefined) {
@@ -191,16 +282,24 @@ export const StorageService = {
       }
       localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(inquiries));
       notifyChange();
+
+      // Async sync to MongoDB backend
+      MongoApi.updateInquiryStatus(id, status, adminNotes).catch(() => {});
     }
   },
 
   deleteInquiry(id: string): void {
-    const inquiries = this.getInquiries().filter(i => i.id !== id);
+    const inquiries = this.getInquiries().filter((i) => i.id !== id);
     localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(inquiries));
     notifyChange();
+
+    // Async sync to MongoDB backend
+    MongoApi.deleteInquiry(id).catch(() => {});
   },
 
-  // Favorites / Saved Trips
+  // -------------------------------------------------------------
+  // FAVORITES
+  // -------------------------------------------------------------
   getFavorites(): string[] {
     try {
       const data = localStorage.getItem(KEYS.FAVORITES);
@@ -215,7 +314,7 @@ export const StorageService = {
     const exists = favs.includes(tripId);
     let updated: string[];
     if (exists) {
-      updated = favs.filter(id => id !== tripId);
+      updated = favs.filter((id) => id !== tripId);
     } else {
       updated = [...favs, tripId];
     }
@@ -224,7 +323,9 @@ export const StorageService = {
     return !exists;
   },
 
-  // Admin Auth
+  // -------------------------------------------------------------
+  // ADMIN AUTH
+  // -------------------------------------------------------------
   isAdminLoggedIn(): boolean {
     return localStorage.getItem(KEYS.ADMIN_AUTH) === "true";
   },
@@ -240,46 +341,79 @@ export const StorageService = {
   },
 
   logoutAdmin(): void {
+    MongoApi.logout();
     localStorage.removeItem(KEYS.ADMIN_AUTH);
     notifyChange();
   },
 
   updateAdminPin(newPin: string): void {
     localStorage.setItem(KEYS.ADMIN_PIN, newPin);
+    // Also try updating backend admin password
+    MongoApi.changePassword(newPin).catch(() => {});
   },
 
-  // Reset & Backup
-  resetAllToDefaults(): void {
+  // -------------------------------------------------------------
+  // RESET & BACKUP
+  // -------------------------------------------------------------
+  async resetAllToDefaults(): Promise<void> {
     localStorage.setItem(KEYS.TRIPS, JSON.stringify(initialTrips));
     localStorage.setItem(KEYS.VEHICLES, JSON.stringify(initialVehicles));
     localStorage.setItem(KEYS.HOTELS, JSON.stringify(initialHotels));
     localStorage.setItem(KEYS.GALLERY, JSON.stringify(initialGallery));
     localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(initialInquiries));
     notifyChange();
+
+    // Reset MongoDB backend as well
+    await MongoApi.resetDatabase().catch(() => {});
   },
 
   exportDatabaseJSON(): string {
-    return JSON.stringify({
-      trips: this.getTrips(),
-      vehicles: this.getVehicles(),
-      hotels: this.getHotels(),
-      gallery: this.getGallery(),
-      inquiries: this.getInquiries()
-    }, null, 2);
+    return JSON.stringify(
+      {
+        trips: this.getTrips(),
+        vehicles: this.getVehicles(),
+        hotels: this.getHotels(),
+        gallery: this.getGallery(),
+        inquiries: this.getInquiries(),
+      },
+      null,
+      2
+    );
   },
 
   importDatabaseJSON(jsonStr: string): boolean {
     try {
       const parsed = JSON.parse(jsonStr);
-      if (parsed.trips) localStorage.setItem(KEYS.TRIPS, JSON.stringify(parsed.trips));
-      if (parsed.vehicles) localStorage.setItem(KEYS.VEHICLES, JSON.stringify(parsed.vehicles));
-      if (parsed.hotels) localStorage.setItem(KEYS.HOTELS, JSON.stringify(parsed.hotels));
-      if (parsed.gallery) localStorage.setItem(KEYS.GALLERY, JSON.stringify(parsed.gallery));
-      if (parsed.inquiries) localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(parsed.inquiries));
+      if (parsed.trips) {
+        localStorage.setItem(KEYS.TRIPS, JSON.stringify(parsed.trips));
+        parsed.trips.forEach((t: Trip) => MongoApi.saveTrip(t).catch(() => {}));
+      }
+      if (parsed.vehicles) {
+        localStorage.setItem(KEYS.VEHICLES, JSON.stringify(parsed.vehicles));
+        parsed.vehicles.forEach((v: Vehicle) => MongoApi.saveVehicle(v).catch(() => {}));
+      }
+      if (parsed.hotels) {
+        localStorage.setItem(KEYS.HOTELS, JSON.stringify(parsed.hotels));
+        parsed.hotels.forEach((h: HotelStay) => MongoApi.saveHotel(h).catch(() => {}));
+      }
+      if (parsed.gallery) {
+        localStorage.setItem(KEYS.GALLERY, JSON.stringify(parsed.gallery));
+        parsed.gallery.forEach((g: GalleryMedia) => MongoApi.saveMedia(g).catch(() => {}));
+      }
+      if (parsed.inquiries) {
+        localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(parsed.inquiries));
+      }
       notifyChange();
       return true;
     } catch {
       return false;
     }
-  }
+  },
 };
+
+// Initial background sync check on application load
+if (typeof window !== "undefined") {
+  setTimeout(() => {
+    StorageService.syncWithBackend();
+  }, 1000);
+}

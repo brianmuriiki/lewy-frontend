@@ -130,7 +130,7 @@ export function HotelsPage({
 
                     <div className="hotel-actions">
                       <a
-                        href={`https://wa.me/254722415892?text=Hello%20Chalcedony%2C%20I%20would%20like%20to%20enquire%20about%20rates%20for%20${encodeURIComponent(
+                        href={`https://wa.me/254705481666?text=Hello%20Chalcedony%2C%20I%20would%20like%20to%20enquire%20about%20rates%20for%20${encodeURIComponent(
                           hotel.name
                         )}.`}
                         target="_blank"

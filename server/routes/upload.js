@@ -5,18 +5,20 @@ import { protectAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
 
-// Configure multer memory storage (stores file in memory buffer to stream into MongoDB)
+const maxFileSize = Number(process.env.MAX_FILE_SIZE) || 10 * 1024 * 1024; // 10MB default
+
+// Configure multer memory storage
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit per image
+    fileSize: maxFileSize,
   },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith("image/")) {
       cb(null, true);
     } else {
-      cb(new Error("Only image files (JPEG, PNG, WebP, GIF) are allowed"), false);
+      cb(new Error("Only image files (JPEG, PNG, WebP, GIF, SVG) are allowed"), false);
     }
   },
 });
@@ -29,23 +31,22 @@ router.post("/", upload.single("image"), async (req, res) => {
       return res.status(400).json({ message: "No image file provided" });
     }
 
-    const { category, caption } = req.body;
+    const { category, caption, uploadedBy } = req.body;
 
-    // Save image directly to MongoDB
     const imageDoc = new Image({
       filename: `${Date.now()}-${req.file.originalname}`,
       originalName: req.file.originalname,
       contentType: req.file.mimetype,
       size: req.file.size,
-      data: req.file.buffer, // Binary buffer saved into MongoDB
+      data: req.file.buffer, // Binary buffer saved in MongoDB
       category: category || "general",
       caption: caption || "",
-      uploadedBy: req.body.uploadedBy || "admin",
+      uploadedBy: uploadedBy || (req.admin?.name || "admin"),
     });
 
     await imageDoc.save();
 
-    // Construct image URL
+    // Construct image public URL
     const host = req.get("host");
     const protocol = req.protocol;
     const imageUrl = `${protocol}://${host}/api/images/${imageDoc._id}`;
@@ -74,7 +75,7 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ message: "Image not found in MongoDB" });
     }
 
-    // Set correct HTTP response headers
+    // Set HTTP response headers
     res.set("Content-Type", image.contentType);
     res.set("Content-Length", image.size);
     res.set("Cache-Control", "public, max-age=86400"); // Cache for 1 day
@@ -115,7 +116,7 @@ router.get("/", async (req, res) => {
 
 // @route   DELETE /api/images/:id
 // @desc    Delete image from MongoDB
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", protectAdmin, async (req, res) => {
   try {
     const image = await Image.findByIdAndDelete(req.params.id);
     if (!image) {

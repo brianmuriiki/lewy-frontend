@@ -92,7 +92,7 @@ export function BookingPage({
     )}%0A*Travelers:* ${numberOfTravelers}%0A*Preferred Date:* ${preferredDate}%0A*Notes:* ${encodeURIComponent(
       destinationOrNotes
     )}`;
-    window.open(`https://wa.me/254722415892?text=${text}`, "_blank");
+    window.open(`https://wa.me/254705481666?text=${text}`, "_blank");
   };
 
   return (
@@ -445,7 +445,7 @@ export function BookingPage({
                   desk directly.
                 </p>
                 <a
-                  href="https://wa.me/254722415892?text=Hello%20Chalcedony%2C%20I%20would%20like%20to%20plan%20a%20trip."
+                  href="https://wa.me/254705481666?text=Hello%20Chalcedony%2C%20I%20would%20like%20to%20plan%20a%20trip."
                   target="_blank"
                   rel="noreferrer"
                   className="btn btn-primary w-full"
@@ -454,7 +454,7 @@ export function BookingPage({
                 </a>
                 <div className="phone-quick">
                   <Icon name="phone" size={15} />
-                  <span>Or call us: +254 722 415 892</span>
+                  <span>Or call us: +254 705 481 666</span>
                 </div>
               </div>
 

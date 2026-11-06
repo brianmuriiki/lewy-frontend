@@ -31,16 +31,16 @@ export function TopBar({
       <div className="container topbar-content">
         <div className="topbar-left">
           <a
-            href="https://wa.me/254722415892?text=Hello%20Chalcedony%20Adventures%2C%20I%20would%20like%20to%20inquire%20about%20a%20trip."
+            href="https://wa.me/254705481666?text=Hello%20Chalcedony%20Adventures%2C%20I%20would%20like%20to%20inquire%20about%20a%20trip."
             target="_blank"
             rel="noreferrer"
             className="topbar-link"
           >
             <Icon name="whatsapp" size={14} />
-            <span>+254 722 415 892</span>
+            <span>+254 705 481 666</span>
           </a>
-          <span className="topbar-divider">·</span>
-          <a href="mailto:hello@chalcedonyadventures.com" className="topbar-link">
+          <span className="topbar-divider hidden-mobile">·</span>
+          <a href="mailto:hello@chalcedonyadventures.com" className="topbar-link hidden-mobile">
             <Icon name="mail" size={14} />
             <span>hello@chalcedonyadventures.com</span>
           </a>

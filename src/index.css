@@ -4198,79 +4198,681 @@ footer {
   font-size: 13px;
 }
 
-/* Responsive Overrides */
+/* ==========================================================================
+   COMPREHENSIVE RESPONSIVE STYLES & MOBILE OPTIMIZATIONS
+   ========================================================================== */
+
+/* Global Mobile Fixes */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Mobile Nav Backdrop */
+.mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 27, 20, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 48;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   TABLETS & MEDIUM SCREENS (<= 992px)
+   -------------------------------------------------------------------------- */
 @media (max-width: 992px) {
+  .desktop-book {
+    display: none !important;
+  }
+
+  .menu-button {
+    display: grid !important;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: var(--forest);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .menu-button:hover {
+    background: #09261e;
+  }
+
+  .main-nav {
+    display: none !important;
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 16px;
+    right: 16px;
+    background: var(--ivory);
+    border-radius: 20px;
+    padding: 24px 20px;
+    box-shadow: 0 25px 60px rgba(5, 30, 22, 0.25);
+    border: 1px solid rgba(13, 51, 40, 0.1);
+    z-index: 49;
+    max-height: calc(100svh - 100px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .main-nav.open {
+    display: flex !important;
+    animation: slideDownMenu 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideDownMenu {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: left;
+    padding: 13px 14px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--forest);
+    border-radius: 10px;
+    border-bottom: 1px solid rgba(13, 51, 40, 0.06);
+    display: block;
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-link:hover {
+    background: rgba(13, 51, 40, 0.05);
+    color: var(--gold);
+  }
+  .nav-link.active {
+    background: rgba(214, 166, 75, 0.15);
+    color: var(--forest);
+    font-weight: 700;
+  }
+  .nav-link.active::after {
+    display: none;
+  }
+
+  .mobile-nav-actions {
+    display: flex !important;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(13, 51, 40, 0.1);
+  }
+  .admin-mobile-link {
+    border: 1px solid rgba(13, 51, 40, 0.15) !important;
+    color: var(--forest) !important;
+  }
+
   .admin-kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
   .settings-grid {
     grid-template-columns: 1fr;
   }
   .ready-cta-card {
     flex-direction: column;
-    padding: 40px 30px;
+    padding: 40px 28px;
     align-items: stretch;
+    text-align: center;
+    gap: 24px;
+  }
+  .ready-cta-actions {
+    justify-content: center;
   }
   .about-split-grid,
   .contact-layout-grid,
   .booking-layout-grid {
     grid-template-columns: 1fr;
+    gap: 32px;
   }
   .pillar-grid,
-  .values-row-full,
   .team-grid,
   .hire-services-grid,
   .standards-grid,
   .contact-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stay-feature {
+    grid-template-columns: 1fr;
+  }
+  .group-stay-box {
+    flex-direction: column;
+    text-align: center;
+    padding: 32px 24px;
+    gap: 24px;
+  }
+  .perks-row {
+    justify-content: center;
+  }
+  .footer-main {
     grid-template-columns: 1fr 1fr;
+    gap: 40px 24px;
   }
 }
 
-@media (max-width: 700px) {
+/* --------------------------------------------------------------------------
+   MOBILE SCREENS & PHONES (<= 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Prevent iOS Safari input auto-zooming */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  .container {
+    width: calc(100% - 32px) !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* TopBar compact */
   .topbar {
     font-size: 11px;
   }
+  .topbar-content {
+    height: 36px;
+  }
   .hidden-mobile {
+    display: none !important;
+  }
+  .topbar-left {
+    gap: 8px;
+  }
+  .topbar-right {
+    gap: 8px;
+  }
+  .admin-toggle-btn {
+    padding: 3px 9px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  .curr-btn {
+    padding: 2px 7px;
+    font-size: 10px;
+  }
+
+  /* Site Header */
+  .site-header {
+    top: 36px;
+  }
+  .nav-shell {
+    height: 64px;
+    width: calc(100% - 24px) !important;
+  }
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+  }
+  .logo strong {
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Page Heroes */
+  .page-hero {
+    padding: 120px 0 36px !important;
+  }
+  .page-hero-kicker {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  .page-hero h1 {
+    font-size: clamp(28px, 7vw, 38px) !important;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: -0.03em;
+  }
+  .page-hero-sub {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* Hero Quick Search */
+  .hero-quick-search {
+    flex-direction: column !important;
+    padding: 14px;
+    gap: 12px;
+    border-radius: 16px;
+    width: 100%;
+    margin-top: 24px;
+  }
+  .search-field {
+    width: 100%;
+    padding: 6px 4px 10px !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  }
+  .search-submit-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 13px 20px;
+    font-size: 15px;
+    border-radius: 10px;
+    height: 48px;
+  }
+
+  /* Sticky Category Filters Strip - Momentum horizontal swipe */
+  .trips-filter-strip,
+  .fleet-filter-bar {
+    top: 56px !important;
+    padding: 12px 0 !important;
+  }
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .category-pills {
+    display: flex;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 8px;
+    padding-bottom: 4px;
+    width: 100%;
+  }
+  .category-pills::-webkit-scrollbar {
     display: none;
   }
-  .site-header {
-    top: 40px;
+  .category-pill {
+    white-space: nowrap !important;
+    flex-shrink: 0;
+    padding: 7px 14px;
+    font-size: 12px;
   }
-  .admin-kpi-grid {
-    grid-template-columns: 1fr;
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+  }
+  .search-box {
+    width: 100%;
+    padding: 8px 14px;
+  }
+  .search-box input {
+    width: 100%;
+    flex: 1;
+    font-size: 14px;
+  }
+  .sort-box {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .sort-box select {
+    flex: 1;
+  }
+
+  /* Catalog Grids: Trips, Fleet, Hotels */
+  .trips-catalog-grid,
+  .fleet-grid,
+  .hotels-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .trip-catalog-card,
+  .vehicle-card,
+  .hotel-card {
+    border-radius: 16px;
+  }
+  .trip-catalog-image,
+  .vehicle-image-wrapper,
+  .hotel-image-wrapper {
+    height: 200px !important;
+  }
+  .trip-catalog-content,
+  .vehicle-body,
+  .hotel-body {
+    padding: 18px 16px !important;
+  }
+  .vehicle-spec-row {
+    flex-wrap: wrap;
+    gap: 10px 14px;
+  }
+  .vehicle-footer,
+  .hotel-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .vehicle-actions,
+  .hotel-actions {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+  .vehicle-actions .btn,
+  .hotel-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .btn-icon-wa {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  /* Gallery Grid */
+  .gallery-masonry-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .gallery-item-card {
+    height: 180px !important;
+    border-radius: 12px !important;
+  }
+  .gallery-item-bottom h4 {
+    font-size: 13px !important;
+  }
+  .gallery-item-meta {
+    font-size: 11px !important;
+    gap: 8px !important;
+  }
+
+  /* Bottom-Sheet Modals for Phones */
+  .modal-overlay,
+  .lightbox-overlay {
+    padding: 0 !important;
+    align-items: flex-end !important;
+    backdrop-filter: blur(5px);
+  }
+  .modal-card,
+  .lightbox-dialog,
+  .admin-form-modal,
+  .inq-modal-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 92svh !important;
+    border-radius: 22px 22px 0 0 !important;
+    padding: 20px 16px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 !important;
+    animation: slideUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideUpModal {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .modal-close-btn,
+  .lightbox-close-btn {
+    position: sticky !important;
+    top: 8px !important;
+    right: 8px !important;
+    margin-left: auto;
+    z-index: 25;
+    background: #fff !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .trip-modal-media {
+    height: 200px !important;
+    margin: -20px -16px 14px !important;
+    width: calc(100% + 32px) !important;
+  }
+  .trip-modal-content {
+    padding: 0 !important;
+  }
+  .modal-meta-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    padding: 12px !important;
+  }
+  .check-list,
+  .inclusions-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 14px !important;
+  }
+  .trip-modal-footer {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+  }
+  .modal-action-btns {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+  .modal-action-btns .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 14px !important;
+  }
+  .lightbox-img-wrap {
+    height: 230px !important;
+  }
+  .lightbox-details {
+    padding: 16px 0 !important;
+  }
+
+  /* Booking & Contact Forms */
+  .booking-layout-grid,
+  .contact-layout-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .booking-form-wrapper,
+  .contact-form-card {
+    padding: 20px 16px !important;
+    border-radius: 18px !important;
+  }
+  .booking-form-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+  }
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .service-selector-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .service-option-btn {
+    padding: 12px 6px !important;
+    font-size: 11px !important;
+    min-height: 68px;
+    border-radius: 10px !important;
+  }
+  .sidebar-card {
+    padding: 22px 16px !important;
+    border-radius: 18px !important;
+  }
+  .booking-success-box {
+    padding: 28px 16px !important;
+    border-radius: 18px !important;
+  }
+
+  /* About Page */
+  .about-story-section {
+    padding: 50px 0 !important;
+  }
+  .about-stat-row {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px !important;
+  }
+  .stat-box strong {
+    font-size: 26px !important;
+  }
+  .about-image-collage {
+    height: 300px !important;
+  }
+  .top-img {
+    height: 200px !important;
+    width: 86% !important;
+  }
+  .bottom-img {
+    height: 150px !important;
+    width: 70% !important;
+  }
+  .experience-badge-float {
+    left: 8px !important;
+    bottom: 8px !important;
+    padding: 8px 12px !important;
+    font-size: 11px;
   }
   .pillar-grid,
-  .values-row-full,
   .team-grid,
   .hire-services-grid,
   .standards-grid,
   .contact-info-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
   }
-  .service-selector-grid {
-    grid-template-columns: 1fr 1fr;
+
+  /* Admin Dashboard Mobile */
+  .admin-header {
+    padding: 12px 14px !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
   }
-  .form-row {
-    grid-template-columns: 1fr;
+  .admin-header-left {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    width: 100%;
   }
-  .check-list,
-  .inclusions-grid {
-    grid-template-columns: 1fr;
+  .admin-header-right {
+    width: 100%;
+    justify-content: space-between !important;
   }
-  .hero-quick-search {
-    flex-direction: column;
-    border-radius: 16px;
+  .admin-kpi-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
   }
-  .search-field:first-child {
-    border-right: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  .kpi-card {
+    padding: 14px !important;
+    gap: 10px !important;
   }
-  .mobile-nav-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  .kpi-icon {
+    width: 38px !important;
+    height: 38px !important;
+  }
+  .kpi-info strong {
+    font-size: 20px !important;
+  }
+  .admin-nav-tabs {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 6px;
+    padding: 4px;
+    width: 100%;
+  }
+  .admin-nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .admin-tab-btn {
+    white-space: nowrap !important;
+    flex-shrink: 0;
+    padding: 8px 13px !important;
+    font-size: 12px !important;
+  }
+  .admin-table-wrapper {
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+  }
+  .admin-grid-cards {
+    grid-template-columns: 1fr !important;
+  }
+  .inq-details-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .settings-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .admin-login-card {
+    padding: 28px 18px !important;
+    border-radius: 20px !important;
+  }
+
+  /* Floating WhatsApp on Mobile */
+  .floating-whatsapp {
+    bottom: 16px !important;
+    right: 14px !important;
+    width: 48px !important;
+    height: 48px !important;
+    z-index: 45 !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25) !important;
+  }
+  .floating-whatsapp svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  /* Footer */
+  .footer-main {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+  .footer-brand,
+  .footer-contact {
+    grid-column: auto !important;
+  }
+  .footer-bottom {
+    flex-direction: column !important;
+    text-align: center;
+    gap: 8px !important;
   }
 }
+
+/* --------------------------------------------------------------------------
+   EXTRA SMALL PHONES (<= 400px - iPhone SE, Galaxy Mini)
+   -------------------------------------------------------------------------- */
+@media (max-width: 400px) {
+  .page-hero h1 {
+    font-size: 26px !important;
+  }
+  .admin-kpi-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .gallery-masonry-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .gallery-item-card {
+    height: 210px !important;
+  }
+  .service-selector-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .ready-cta-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
